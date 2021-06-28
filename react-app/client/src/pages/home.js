@@ -5,6 +5,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useHistory } from "react-router";
 import { selectUser } from "../components/redux_code/userSlice";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { login_redux } from "../components/redux_code/userSlice";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 const Home = (props) => {
   const history = useHistory();
   const classes = useStyles();
-
+  const dispatch = useDispatch();
   // console.log(props.location.name_user);
   // u will have user name in props.location.name_user
   const user = useSelector(selectUser);
@@ -51,6 +53,10 @@ const Home = (props) => {
       )
       .then((res) => {
         console.log(res.data);
+        dispatch(
+          login_redux(null)
+        );
+
         history.push("/");
       });
   }

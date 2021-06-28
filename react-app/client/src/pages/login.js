@@ -56,8 +56,16 @@ export default function Login() {
     withCredentials: true
   }).then((res) => {
     if(res.data.isloggedin){
+      dispatch(
+        login_redux({
+          user_name: res.data.name,
+          user_id: res.data.user_id,
+          isauthenticated : true
+        })
+      );
+
       history.push("/home");
-      console.log(res.data);
+      // console.log(res.data);
     }
 });
 
@@ -100,12 +108,13 @@ export default function Login() {
           withCredentials: true
         })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.isvaliduser) {
             dispatch(
               login_redux({
                 user_name: res.data.name,
-                user_id: res.data.user_id
+                user_id: res.data.user_id,
+                isauthenticated : true
               })
             );
 
