@@ -11,8 +11,9 @@ var cors = require('cors');
 var {Credential, Post, Company} =  require("./schemas/dbschemas");
 const { json } = require('express');
 
-mongoose.connect(process.env.DB_URL, {useNewUrlParser:true, useUnifiedTopology:true, useFindAndModify: false});
 
+mongoose.set('useFindAndModify',false);
+mongoose.connect(process.env.DB_URL, {useNewUrlParser:true, useUnifiedTopology:true, useFindAndModify: false});
 const app = express();
 
 var store = new MongoDBStore({
@@ -242,6 +243,7 @@ app.get("/testingreact", function(req,res){
     res.send(ex_data_react)
 });
 
+//this route is for entering post into database
 app.post("/testingreact", function(req,res){
     console.log(req.body);
     console.log(new Date());
@@ -249,6 +251,20 @@ app.post("/testingreact", function(req,res){
     post.save();
     res.send("done");
 });
+
+//this route is for updating the post
+app.post("/updatepost", function(req,res){
+    // console.log(req.body);
+    Post.findByIdAndUpdate(req.body.postid,{title:req.body.title,time:Date(), c_name : req.body.c_name, c_role: req.body.c_role, branch: req.body.branch, desc: req.body.desc},{new:true}, (err,doc) => {
+        if(err){
+            res.send({updated:false})
+        }
+        else{
+            res.send({updated:true})
+        }
+    })
+})
+
 
 app.get("/test", function(req,res){
     // const company = new Company({company_name : "Infosys", company_roles : ["se", "ses", "sp"]});
